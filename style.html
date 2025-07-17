@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, My Love!</title>
+  <link rel="preload" as="audio" href="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-to-you-528.mp3" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #2b1055, #1c0522);
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+
+    .hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff6b9e;
+      transform: rotate(45deg);
+      animation: float 6s infinite ease-in;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 5px #ff6b9e);
+    }
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff6b9e;
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: -10px; top: 0; }
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+      10% { opacity: 0.7; }
+      90% { opacity: 0.7; }
+      100% { transform: translateY(-20vh) rotate(45deg); opacity: 0; }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    img {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      margin-top: 30px;
+      z-index: 3;
+      box-shadow: 0 0 30px rgba(255, 107, 158, 0.6);
+      transition: all 0.5s ease;
+      cursor: pointer;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(255, 107, 158, 0.8);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: white;
+      margin: 20px 0;
+      z-index: 3;
+      text-shadow: 0 0 10px rgba(255, 107, 158, 0.8);
+      font-family: 'Dancing Script', cursive;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s ease 0.3s;
+    }
+
+    .show h1 {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid #ff6b9e;
+      animation: typing 3s steps(40, end) forwards, blink 0.7s infinite;
+      max-width: 90%;
+    }
+
+    @keyframes typing { from { width: 0; } to { width: 100%; } }
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #ff6b9e; }
+    }
+
+    .message {
+      font-size: 1.2em;
+      color: #fff;
+      margin: 25px 15px;
+      max-width: 90%;
+      display: none;
+      z-index: 3;
+      line-height: 1.6;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.1em;
+      background: linear-gradient(45deg, #ff6b9e, #ff8e53);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 3;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 107, 158, 0.4);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 107, 158, 0.6);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff8e53, #ff6b9e);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    button:hover::after {
+      opacity: 1;
+    }
+
+    .photo-frame {
+      position: relative;
+      margin: 30px 0;
+    }
+
+    .photo-frame::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border: 2px solid #ff6b9e;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.7; }
+    }
+
+    .gallery {
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      max-width: 90%;
+      z-index: 3;
+    }
+
+    .gallery.show {
+      display: flex;
+      animation: fadeIn 1s ease;
+    }
+
+    .gallery img {
+      width: 190px;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.1);
+      z-index: 4;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .memory-box {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 18px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .memory-box.show {
+      display: flex;
+      animation: fadeIn 1s ease;
+    }
+
+    .memory-text {
+      font-style: italic;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .nav-button {
+      padding: 8px 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8em; }
+      img { width: 200px; height: 200px; }
+      button { font-size: 1em; padding: 12px 25px; }
+      .message { font-size: 1em; padding: 15px; }
+      .gallery img { width: 100%; height: 30%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars-container"></div>
+  <div class="hearts" id="hearts-container"></div>
+
+  <div class="container" id="main-container">
+    <div class="photo-frame">
+      <img src="image 3.jpg" alt="Her Photo" id="main-photo" onclick="showGallery()" />
+    </div>
+    <h1 class="typewriter">Happy Birthday, Dear Gopuz! 💖</h1>
+
+    <p class="message" id="wish">
+      On this special day, I want you to know how incredibly amazing you are.<br><br>
+      Your smile brightens my darkest days, your laughter is my favorite melody,<br>
+      and your love is the greatest gift I've ever received.<br><br>
+      May this year bring you all the happiness, love, and success you deserve.<br>
+      You're the most beautiful person I know, inside and out.<br><br>
+      Happy Birthday, Gopuz! 🎂✨
+    </p>
+
+    <div class="gallery" id="photo-gallery">
+      <!-- More photos can be added here -->
+      <img src="image4.jpg" alt="Photo 1" />
+      <img src="image 3.jpg" alt="Photo 2" />
+      <img src="image 2.jpg" alt="Photo 3" />
+      <img src="image 1.jpg" alt="Photo 4" />
+    </div>
+
+    <button id="main-button" onclick="showWish()">Click for Your Special Gift 💝</button>
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Initialize stars in the background
+    const starsContainer = document.getElementById('stars-container');
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.width = (Math.random() * 3 + 1) + 'px';
+      star.style.height = star.style.width;
+      starsContainer.appendChild(star);
+    }
+
+    // Floating hearts
+    const heartContainer = document.getElementById('hearts-container');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      heart.style.opacity = Math.random() * 0.5 + 0.3;
+      heart.style.width = (Math.random() * 15 + 10) + 'px';
+      heart.style.height = heart.style.width;
+      heartContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 200);
+
+    // Show main content after page loads
+    window.addEventListener('load', function() {
+      document.getElementById('main-container').classList.add('show');
+      
+      // Start music (must be user-initiated on most browsers)
+      const music = document.getElementById('bg-music');
+      music.volume = 0.3;
+      
+      // Some browsers require this to be in a user gesture handler
+      document.getElementById('main-button').addEventListener('click', function() {
+        music.play().catch(e => console.log("Auto-play prevented:", e));
+      }, {once: true});
+    });
+
+    // Show wish and confetti
+    function showWish() {
+      const wish = document.getElementById("wish");
+      wish.style.display = "block";
+      setTimeout(() => wish.classList.add('show'), 10);
+      
+      // Change button text and show memory button
+      document.getElementById('main-button').textContent = "More Surprises? 🎉";
+      document.getElementById('main-button').onclick = showGallery;
+      document.getElementById('memory-button').style.display = "block";
+      
+      // Big confetti explosion
+      confetti(150);
+    }
+
+    // Show photo gallery
+    function showGallery() {
+      const gallery = document.getElementById('photo-gallery');
+      gallery.classList.add('show');
+      document.getElementById('main-button').style.display = "none";
+    }
+
+    // Show memories
+    function showMemories() {
+      document.getElementById('memory-box').classList.add('show');
+      document.getElementById('memory-button').style.display = "none";
+    }
+
+    // Memory navigation
+
+    let currentMemory = 0;
+
+    function updateMemory() {
+      document.getElementById('memory-text').textContent = memories[currentMemory];
+    }
+
+    function nextMemory() {
+      currentMemory = (currentMemory + 1) % memories.length;
+      updateMemory();
+    }
+
+    function prevMemory() {
+      currentMemory = (currentMemory - 1 + memories.length) % memories.length;
+      updateMemory();
+    }
+
+    // Confetti function
+    function confetti(count = 100) {
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = confetti.style.width;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-20px';
+        confetti.style.opacity = 0.9;
+        confetti.style.zIndex = 1000;
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        confetti.style.animation = `drop ${Math.random() * 3 + 2}s ease-out`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+
+    // Drop animation style
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes drop {
+        to {
+          transform: translateY(100vh) rotate(${Math.random() * 720}deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
